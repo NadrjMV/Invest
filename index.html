@@ -1,1 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LifePlan Finance OS</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="background-glow"></div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">LifePlan Finance OS</div>
+      <nav class="nav">
+        <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+        <button class="nav-btn" data-section="profile">Perfil</button>
+        <button class="nav-btn" data-section="institutions">Instituições</button>
+        <button class="nav-btn" data-section="goals">Metas</button>
+        <button class="nav-btn" data-section="entries">Lançamentos</button>
+      </nav>
+      <div class="auth-mini">
+        <div class="user-avatar">👤</div>
+        <div>
+          <div id="sidebarUserName" class="user-name">Convidado</div>
+          <div id="sidebarUserEmail" class="user-email">demo@lifeplan.app</div>
+        </div>
+        <button id="logoutBtn" class="pill">Sair</button>
+      </div>
+    </aside>
 
+    <main class="content">
+      <header class="page-header">
+        <div>
+          <p class="eyebrow">Bem-vindo(a)</p>
+          <h1 id="userGreeting">Olá, Planner</h1>
+          <p class="muted">Visualize seu patrimônio e evolua pelas faixas de riqueza.</p>
+        </div>
+        <div class="stat-chip">
+          <span>Saldo total</span>
+          <strong id="totalBalance">R$ 0,00</strong>
+        </div>
+      </header>
+
+      <section id="dashboard" class="section visible">
+        <div class="grid cards-grid">
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <p class="muted">Patrimônio total</p>
+                <h3 id="cardTotal">R$ 0,00</h3>
+              </div>
+              <span class="badge">Evolução</span>
+            </div>
+            <div id="sparkline" class="sparkline"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <p class="muted">Distribuição por classe</p>
+                <h3>Alocação</h3>
+              </div>
+              <span class="badge accent">Classes</span>
+            </div>
+            <div id="classPie" class="pie"></div>
+            <div id="classLegend" class="legend"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <p class="muted">Distribuição por instituição</p>
+                <h3>Contas</h3>
+              </div>
+              <span class="badge accent">Instituições</span>
+            </div>
+            <div id="institutionPie" class="pie"></div>
+            <div id="institutionLegend" class="legend"></div>
+          </div>
+          <div class="card tier-card" id="tierCard">
+            <div class="card-head">
+              <div>
+                <p class="muted">Sua faixa atual</p>
+                <h3 id="tierTitle">Faixa 1 • Liquidez Máxima</h3>
+              </div>
+              <span class="badge">Roadmap</span>
+            </div>
+            <p id="tierSubtitle" class="muted">Sugestões personalizadas para o próximo passo.</p>
+            <ul id="tierList" class="pill-list"></ul>
+          </div>
+        </div>
+
+        <div class="grid two-columns">
+          <div class="card">
+            <div class="card-head">
+              <h3>Metas e progresso</h3>
+              <button class="pill" data-section="goals">Ver todas</button>
+            </div>
+            <div id="goalsList" class="list"></div>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>Últimos lançamentos</h3>
+              <button class="pill" data-section="entries">Ver todos</button>
+            </div>
+            <div id="recentEntries" class="list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile" class="section">
+        <div class="card form-card">
+          <div class="card-head">
+            <div>
+              <p class="muted">Perfil financeiro</p>
+              <h3>Renda, gastos e objetivo principal</h3>
+            </div>
+          </div>
+          <form id="profileForm" class="form-grid">
+            <label>
+              <span>Renda mensal</span>
+              <input type="number" name="income" placeholder="R$" required />
+            </label>
+            <label>
+              <span>Despesas fixas</span>
+              <input type="number" name="expenses" placeholder="R$" required />
+            </label>
+            <label>
+              <span>Meta principal (nome)</span>
+              <input type="text" name="mainGoalName" placeholder="Ex.: Moto" />
+            </label>
+            <label>
+              <span>Meta principal (valor alvo)</span>
+              <input type="number" name="mainGoalTarget" placeholder="20000" />
+            </label>
+            <label>
+              <span>Prazo da meta principal</span>
+              <input type="date" name="mainGoalDeadline" />
+            </label>
+            <label>
+              <span>Meta principal vinculada</span>
+              <select name="primaryGoalId" id="primaryGoalSelect">
+                <option value="">Selecionar meta existente</option>
+              </select>
+            </label>
+            <button type="submit" class="primary full">Salvar perfil</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="institutions" class="section">
+        <div class="card form-card">
+          <div class="card-head">
+            <h3>Adicionar instituição</h3>
+          </div>
+          <form id="institutionForm" class="form-grid">
+            <label>
+              <span>Nome</span>
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              <span>Tipo</span>
+              <select name="type" required>
+                <option>Banco Digital</option>
+                <option>Corretora</option>
+                <option>Carteira</option>
+                <option>Dinheiro</option>
+              </select>
+            </label>
+            <label>
+              <span>Rendimento</span>
+              <input type="text" name="yield" placeholder="115% do CDI" />
+            </label>
+            <label>
+              <span>Liquidez</span>
+              <select name="liquidity">
+                <option>D+0</option>
+                <option>D+1</option>
+                <option>No vencimento</option>
+              </select>
+            </label>
+            <label>
+              <span>Nível de risco (1-5)</span>
+              <input type="number" name="risk" min="1" max="5" value="2" />
+            </label>
+            <button type="submit" class="primary full">Salvar instituição</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Instituições cadastradas</h3>
+          </div>
+          <div id="institutionsList" class="list"></div>
+        </div>
+      </section>
+
+      <section id="goals" class="section">
+        <div class="card form-card">
+          <div class="card-head">
+            <h3>Nova meta</h3>
+          </div>
+          <form id="goalForm" class="form-grid">
+            <label>
+              <span>Nome da meta</span>
+              <input type="text" name="name" required />
+            </label>
+            <label>
+              <span>Valor alvo</span>
+              <input type="number" name="target" required />
+            </label>
+            <label>
+              <span>Data alvo</span>
+              <input type="date" name="due" />
+            </label>
+            <label>
+              <span>Prioridade</span>
+              <select name="priority">
+                <option value="alta">Alta</option>
+                <option value="média">Média</option>
+                <option value="baixa">Baixa</option>
+              </select>
+            </label>
+            <button type="submit" class="primary full">Salvar meta</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Metas</h3>
+          </div>
+          <div id="goalsFullList" class="list"></div>
+        </div>
+      </section>
+
+      <section id="entries" class="section">
+        <div class="card form-card">
+          <div class="card-head">
+            <h3>Novo lançamento</h3>
+          </div>
+          <form id="entryForm" class="form-grid">
+            <label>
+              <span>Valor</span>
+              <input type="number" name="amount" required />
+            </label>
+            <label>
+              <span>Data</span>
+              <input type="date" name="date" required />
+            </label>
+            <label>
+              <span>Instituição</span>
+              <select name="institutionId" id="entryInstitution" required></select>
+            </label>
+            <label>
+              <span>Meta (opcional)</span>
+              <select name="goalId" id="entryGoal">
+                <option value="">Sem meta</option>
+              </select>
+            </label>
+            <label>
+              <span>Classe de ativo</span>
+              <select name="assetClass">
+                <option>Caixa</option>
+                <option>Renda Fixa</option>
+                <option>FII</option>
+                <option>ETF</option>
+                <option>Ações</option>
+                <option>Exterior</option>
+              </select>
+            </label>
+            <label class="full">
+              <span>Descrição</span>
+              <input type="text" name="description" placeholder="Ex.: Aporte na meta Moto" />
+            </label>
+            <button type="submit" class="primary full">Salvar lançamento</button>
+          </form>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h3>Lançamentos</h3>
+          </div>
+          <div id="entriesList" class="list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="authModal" class="auth-modal">
+    <div class="auth-card">
+      <div class="card-head">
+        <div>
+          <p class="muted" id="authSubtitle">Acesse sua conta</p>
+          <h3 id="authTitle">Login</h3>
+        </div>
+        <button id="toggleAuth" class="pill">Criar conta</button>
+      </div>
+      <form id="authForm" class="form-grid">
+        <label>
+          <span>Nome</span>
+          <input type="text" name="name" placeholder="Seu nome" />
+        </label>
+        <label>
+          <span>E-mail</span>
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          <span>Senha</span>
+          <input type="password" name="password" required />
+        </label>
+        <button type="submit" class="primary full" id="authSubmit">Entrar</button>
+        <p class="muted small">Dados armazenados localmente. Preencha seu config Firebase em <code>script.js</code> para persistência em nuvem.</p>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
